@@ -8,25 +8,30 @@ phone_table_title_regex = re.compile(r'Telefonische Erreichbarkeit')
 office_table_title_regex = re.compile(r'Sprechstundenzeiten')
 
 def parse_file(path):
+    arzts = list()
     with open(path, 'r') as file:
         soup = BS(file, 'lxml')
         results = soup.find_all(class_ = 'resultrow')
         for resultrow in results:
-            parse_result(soup, resultrow)
+            arzts.append(parse_result(soup, resultrow))
+    print(arzts)
 
 def parse_result(soup, row):
+    arzt = Arzt()
     name_hours = row.find('dd', class_ = 'name')
     title_and_name = name_hours.dt.string
+    arzt.name = title_and_name # TODO: Split this in a smart manner
+
     nh_dts = name_hours.find_all('dt')
     nh_dts.pop(0)
 
     for dt in nh_dts:
         if is_phone_table_title(dt):
             phone_table = dt.find_next_sibling('dd').table
-            phone_hours = parse_hourtable(phone_table)
+            arzt.phone_hours = parse_hourtable(phone_table)
         if is_office_table_title(dt):
             office_table = dt.find_next_sibling('dd').table
-            office_hours = parse_hourtable(office_table)
+            arzt.office_hours = parse_hourtable(office_table)
 
     field_focus = row.find('dd', class_ = 'qualifikation')
     bulletlist_dls = field_focus.find_all('dl', class_ = 'bulletlist')
@@ -35,19 +40,20 @@ def parse_result(soup, row):
         if dl.dt.string.endswith(" / Fachgebiet"):
             field_title_string = dl.dt.string
             field_title_components = field_title_string.split(' / ')
-            drtype = field_title_components[0]
+            arzt.drtype = field_title_components[0]
 
             field_dds = dl.find_all('dd')
-            fields = list()
+            arzt.fields = list()
             for dd in field_dds:
-                fields.append(dd.string)
+                arzt.fields.append(dd.string)
         elif dl.dt.string.endswith("Schwerpunkt"):
             focus_dds = dl.find_all('dd')
-            focus = list()
+            arzt.focus = list()
             for dd in focus_dds:
-                focus.append(dd.string)
+                arzt.focus.append(dd.string)
 
     contact = row.find('dd', class_ = 'adresse')
+    return arzt
 
 def is_phone_table_title(dt):
     dt_strings = dt.stripped_strings
