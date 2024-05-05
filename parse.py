@@ -47,6 +47,17 @@ def parse_result(soup, row):
                     types.append(dd.string)
                     dd = dd.next_sibling
                 praxis.praxistype = types
+            elif dt.string == "Rechtsstatus:":
+                dd = dt.next_sibling
+                if dd is not None and dd.name == "dd":
+                    arzt.status = dd.string
+            elif dt.string == "Genehmigungen":
+                permits = list()
+                dd = dt.next_sibling
+                while dd is not None and dd.name == "dd":
+                    permits.append(dd.string)
+                    dd = dd.next_sibling
+                arzt.permits = permits
 
     arzt.praxis = praxis
     return arzt
