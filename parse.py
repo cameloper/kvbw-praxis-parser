@@ -33,6 +33,13 @@ def parse_result(soup, row):
                     ids[id_components[0]] = id_components[1]
                     dd = dd.next_sibling
                 arzt.ids = ids
+            elif list(dt.stripped_strings).count('Fremdsprachen:') > 0:
+                langs = list()
+                dd = dt.next_sibling
+                while dd is not None and dd.name == "dd":
+                    langs.append(dd.string)
+                    dd = dd.next_sibling
+                arzt.languages = langs
 
     arzt.praxis = praxis
     return arzt
