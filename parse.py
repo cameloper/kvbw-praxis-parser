@@ -52,8 +52,45 @@ def parse_result(soup, row):
             for dd in focus_dds:
                 arzt.focus.append(dd.string)
 
-    contact = row.find('dd', class_ = 'adresse')
+    praxis_dd = row.find('dd', class_ = 'adresse')
+    arzt.praxis = parse_praxis(praxis_dd)
+    
     return arzt
+
+def parse_praxis(dd):
+    address_components = list(dd.p.stripped_strings)
+    name = address_components[0]
+    street_no = address_components[1]
+    plz = address_components[2].split(' ')[0]
+    city = address_components[3].removeprefix('Ortsteil: ')
+    province = address_components[4].removeprefix('Landkreis: ')
+    address = Address(plz, province, city, street_no)
+    
+    contact = dd.dl.dd
+    links = contact.find_all('a')
+    emails = list()
+    weblinks = list()
+    for a in links:
+        if a['href'].startswith('mailto:'):
+            emails.append(a.string)
+        else:
+            weblinks.append(a.string)
+
+    contact_string = contact.stripped_strings
+    phone_prefix = "Telefon: "
+    fax_prefix = "Telefax: "
+    phone_numbers = list()
+    fax_numbers = list()
+    for info in contact_string:
+        if info.startswith(phone_prefix):
+            phone_numbers.append(info.removeprefix(phone_prefix))
+        elif info.startswith(fax_prefix):
+            fax_numbers.append(info.removeprefix(fax_prefix))
+
+    return Praxis(name, emails, phone_numbers, fax_numbers, weblinks, address, None)
+
+def is_not_email(a):
+    return not a['href'].startswith('mailto:')
 
 def is_phone_table_title(dt):
     dt_strings = dt.stripped_strings
