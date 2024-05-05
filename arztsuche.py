@@ -37,14 +37,16 @@ class Praxis(object):
         self.praxistype = praxistype # Zweigpraxis
         
 class Arzt(object):
-    def __init__(self, degree, name, surname, ids, languages, status, field, permits, misc, praxis, office_hours, phone_hours):
+    def __init__(self, degree, name, surname, ids, languages, status, drtype, field, focus, permits, misc, praxis, office_hours, phone_hours):
         self.degree = degree # Dr. med.
         self.name = name # Max
         self.surname = surname # Mustermann
         self.ids = ids # {"LANR": 817957768, "BSNR": 526920700, "HBSNR": 526920700}
         self.languages = languages # ["en", "tr"]
         self.status = status # zugelassener Psychotherapeut
+        self.drtype = drtype # Facharzt
         self.field = field # Psychologischer Psychotherapeut
+        self.focus = focus # Nephrologie
         self.permits = permits # ["Verhaltenstherapeutische Einzeltherapie – Erwachsene", "Verhaltenstherapeutische Gruppentherapie – Erwachsene"]
         self.misc = misc # ["Psychoanalyse"]
         self.praxis = praxis # type Praxis
