@@ -28,7 +28,25 @@ def parse_result(soup, row):
             office_table = dt.find_next_sibling('dd').table
             office_hours = parse_hourtable(office_table)
 
-    field = row.find('dd', class_ = 'qualifikation')
+    field_focus = row.find('dd', class_ = 'qualifikation')
+    bulletlist_dls = field_focus.find_all('dl', class_ = 'bulletlist')
+
+    for dl in bulletlist_dls:
+        if dl.dt.string.endswith(" / Fachgebiet"):
+            field_title_string = dl.dt.string
+            field_title_components = field_title_string.split(' / ')
+            drtype = field_title_components[0]
+
+            field_dds = dl.find_all('dd')
+            fields = list()
+            for dd in field_dds:
+                fields.append(dd.string)
+        elif dl.dt.string.endswith("Schwerpunkt"):
+            focus_dds = dl.find_all('dd')
+            focus = list()
+            for dd in focus_dds:
+                focus.append(dd.string)
+
     contact = row.find('dd', class_ = 'adresse')
 
 def is_phone_table_title(dt):
