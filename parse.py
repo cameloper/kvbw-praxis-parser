@@ -20,8 +20,21 @@ def parse_result(soup, row):
     arzt = parse_arzt(row)
 
     praxis_dd = row.find('dd', class_ = 'adresse')
-    arzt.praxis = parse_praxis(praxis_dd)
+    praxis = parse_praxis(praxis_dd)
     
+    detail_divs = row.find_all('div', class_ = 'column third')
+    for div in detail_divs:
+        for dt in div.find_all('dt'):
+            if dt.string == "Schlüsselnummern:":
+                ids = dict()
+                dd = dt.next_sibling
+                while dd is not None and dd.name == "dd":
+                    id_components = dd.string.split(': ')
+                    ids[id_components[0]] = id_components[1]
+                    dd = dd.next_sibling
+                arzt.ids = ids
+
+    arzt.praxis = praxis
     return arzt
 
 def parse_arzt(row):
