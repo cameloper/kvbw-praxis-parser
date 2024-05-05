@@ -17,6 +17,14 @@ def parse_file(path):
     print(arzts)
 
 def parse_result(soup, row):
+    arzt = parse_arzt(row)
+
+    praxis_dd = row.find('dd', class_ = 'adresse')
+    arzt.praxis = parse_praxis(praxis_dd)
+    
+    return arzt
+
+def parse_arzt(row):
     arzt = Arzt()
     name_hours = row.find('dd', class_ = 'name')
     title_and_name = name_hours.dt.string
@@ -52,9 +60,6 @@ def parse_result(soup, row):
             for dd in focus_dds:
                 arzt.focus.append(dd.string)
 
-    praxis_dd = row.find('dd', class_ = 'adresse')
-    arzt.praxis = parse_praxis(praxis_dd)
-    
     return arzt
 
 def parse_praxis(dd):
@@ -66,7 +71,11 @@ def parse_praxis(dd):
     province = address_components[4].removeprefix('Landkreis: ')
     address = Address(plz, province, city, street_no)
     
-    contact = dd.dl.dd
+    contact_dl = dd.dl
+    if contact_dl is None:
+        return Praxis(name, None, None, None, None, address, None)
+
+    contact = contact_dl.dd
     links = contact.find_all('a')
     emails = list()
     weblinks = list()
