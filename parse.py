@@ -40,6 +40,13 @@ def parse_result(soup, row):
                     langs.append(dd.string)
                     dd = dd.next_sibling
                 arzt.languages = langs
+            elif dt.string == "Praxisart:":
+                types = list()
+                dd = dt.next_sibling
+                while dd is not None and dd.name == "dd":
+                    types.append(dd.string)
+                    dd = dd.next_sibling
+                praxis.praxistype = types
 
     arzt.praxis = praxis
     return arzt

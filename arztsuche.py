@@ -20,14 +20,14 @@ class Time(object):
         self.time_tuples = time_tuples # [("12:00", "13:00"), ("14:00", "16:30")]
 
 class Praxis(object):
-    def __init__(self, name, email, tel, fax, web, address, praxistype):
+    def __init__(self, name, email, tel, fax, web, address, praxistypes):
         self.name = name # Praxis A und B
         self.email = email # info@praxis-ab.de
         self.tel = tel # 0721123456
         self.fax = fax # 0721789012
         self.web = web # praxis-ab.de
         self.address = address # type Address
-        self.praxistype = praxistype # Zweigpraxis
+        self.praxistypes = praxistypes # Zweigpraxis
         
 class Arzt(object):
     def __init__(self,
