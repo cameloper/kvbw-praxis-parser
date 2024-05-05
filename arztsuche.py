@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import StrEnum
 
 class Address(object):
     def __init__(self, plz, province, city, street, no):
@@ -8,12 +8,12 @@ class Address(object):
         self.street = street # Haizingerstraße
         self.no = no # 11
 
-class WorkDay(Enum):
-    MONDAY = 0
-    TUESDAY = 1
-    WEDNSDAY = 2
-    THURSDAY = 3
-    FRIDAY = 4
+class WorkDay(StrEnum):
+    MONDAY = 'Mo'
+    TUESDAY = 'Di'
+    WEDNSDAY = 'Mi'
+    THURSDAY = 'Do'
+    FRIDAY = 'Fr'
 
 class Time(object):
     def __init__(self, workday, startTime, endTime):
@@ -21,18 +21,10 @@ class Time(object):
         self.startTime = startTime # 12:00
         self.endTime = endTime # 14:30
 
-class WorkDay(Enum):
-    MONDAY = 0
-    TUESDAY = 1
-    WEDNSDAY = 2
-    THURSDAY = 3
-    FRIDAY = 4
-
 class Time(object):
-    def __init__(self, workday, startTime, endTime):
+    def __init__(self, workday, time_tuples):
         self.workday = workday # MONDAY
-        self.startTime = startTime # 12:00
-        self.endTime = endTime # 14:30
+        self.time_tuples = time_tuples # [("12:00", "13:00"), ("14:00", "16:30")]
 
 class Praxis(object):
     def __init__(self, name, email, tel, fax, web, address, praxistype):
