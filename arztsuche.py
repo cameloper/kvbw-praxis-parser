@@ -1,12 +1,11 @@
 from enum import StrEnum
 
 class Address(object):
-    def __init__(self, plz, province, city, street, no):
+    def __init__(self, plz, province, city, street_no):
         self.plz = plz # 76131
         self.province = province # Karlsruhe - Stadt
         self.city = city # Oststadt
-        self.street = street # Haizingerstraße
-        self.no = no # 11
+        self.street_no = street_no # Haizingerstraße 11
 
 class WorkDay(StrEnum):
     MONDAY = 'Mo'
@@ -14,12 +13,6 @@ class WorkDay(StrEnum):
     WEDNSDAY = 'Mi'
     THURSDAY = 'Do'
     FRIDAY = 'Fr'
-
-class Time(object):
-    def __init__(self, workday, startTime, endTime):
-        self.workday = workday # MONDAY
-        self.startTime = startTime # 12:00
-        self.endTime = endTime # 14:30
 
 class Time(object):
     def __init__(self, workday, time_tuples):
