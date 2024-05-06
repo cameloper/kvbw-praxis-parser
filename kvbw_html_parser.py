@@ -1,22 +1,16 @@
 from bs4 import BeautifulSoup as BS
 from arztsuche import *
-import sys
 import re
 
-time_td_regex = re.compile(r'\d{2}:\d{2} - \d{2}:\d{2}')
-phone_table_title_regex = re.compile(r'Telefonische Erreichbarkeit')
-office_table_title_regex = re.compile(r'Sprechstundenzeiten')
-
-def parse_file(path):
+def parse_all_resultrows(html):
     arzts = list()
-    with open(path, 'r') as file:
-        soup = BS(file, 'lxml')
-        results = soup.find_all(class_ = 'resultrow')
-        for resultrow in results:
-            arzts.append(parse_result(soup, resultrow))
-    print(arzts)
+    soup = BS(file, 'lxml')
+    results = soup.find_all(class_ = 'resultrow')
+    for resultrow in results:
+        arzts.append(parse_resultrow(soup, resultrow))
+    return arzts
 
-def parse_result(soup, row):
+def parse_resultrow(soup, row):
     arzt = parse_arzt(row)
 
     praxis_dd = row.find('dd', class_ = 'adresse')
@@ -154,6 +148,7 @@ def is_office_table_title(dt):
     return False
 
 def parse_hourtable(table):
+    time_td_regex = re.compile(r'\d{2}:\d{2} - \d{2}:\d{2}')
     days = list()
     trs = table.find_all('tr')
     for day in trs:
@@ -168,7 +163,3 @@ def parse_hourtable(table):
             time = Time(weekday, hours)
             days.append(time)
     return days
-
-if __name__ == "__main__":
-    file_path = sys.argv[1]
-    parse_file(file_path)
