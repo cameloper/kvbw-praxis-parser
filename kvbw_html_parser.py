@@ -40,7 +40,7 @@ def parse_resultrow(soup, row):
                 while dd is not None and dd.name == "dd":
                     types.append(dd.string)
                     dd = dd.next_sibling
-                praxis.praxistype = types
+                praxis.praxistypes = types
             elif dt.string == "Rechtsstatus:":
                 dd = dt.next_sibling
                 if dd is not None and dd.name == "dd":
@@ -105,7 +105,7 @@ def parse_praxis(dd):
     
     contact_dl = dd.dl
     if contact_dl is None:
-        return Praxis(name, None, None, None, None, address, None)
+        return Praxis(name, list(), list(), list(), list(), address)
 
     contact = contact_dl.dd
     links = contact.find_all('a')
@@ -128,7 +128,7 @@ def parse_praxis(dd):
         elif info.startswith(fax_prefix):
             fax_numbers.append(info.removeprefix(fax_prefix))
 
-    return Praxis(name, emails, phone_numbers, fax_numbers, weblinks, address, None)
+    return Praxis(name, emails, phone_numbers, fax_numbers, weblinks, address)
 
 def is_not_email(a):
     return not a['href'].startswith('mailto:')
