@@ -59,7 +59,7 @@ def parse_resultrow(soup, row):
 def parse_arzt(row):
     arzt = Arzt()
     name_hours = row.find('dd', class_ = 'name')
-    title_and_name = name_hours.dt.string
+    title_and_name = ' '.join(list(name_hours.dt.stripped_strings))
     arzt.name = title_and_name # TODO: Split this in a smart manner
 
     nh_dts = name_hours.find_all('dt')
