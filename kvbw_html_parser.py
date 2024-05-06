@@ -4,7 +4,7 @@ import re
 
 def parse_all_resultrows(html):
     arzts = list()
-    soup = BS(file, 'lxml')
+    soup = BS(html, 'lxml')
     results = soup.find_all(class_ = 'resultrow')
     for resultrow in results:
         arzts.append(parse_resultrow(soup, resultrow))
