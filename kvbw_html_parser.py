@@ -159,7 +159,10 @@ def parse_hourtable(table):
             hours.append(time_tuple)
         if len(hours) > 0:
             weekday_string = day.td.string[:2]
-            weekday = WorkDay(weekday_string)
-            time = Time(weekday, hours)
-            days.append(time)
+            try:
+                weekday = Weekday(weekday_string)
+                time = Time(weekday, hours)
+                days.append(time)
+            except:
+                print("{} is not a valid weekday value".format(weekday_string))
     return days

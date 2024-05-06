@@ -7,12 +7,14 @@ class Address(object):
         self.city = city # Oststadt
         self.street_no = street_no # Haizingerstraße 11
 
-class WorkDay(StrEnum):
+class Weekday(StrEnum):
     MONDAY = 'Mo'
     TUESDAY = 'Di'
     WEDNSDAY = 'Mi'
     THURSDAY = 'Do'
     FRIDAY = 'Fr'
+    SATURDAY = 'Sa'
+    SUNDAY = 'So'
 
 class Time(object):
     def __init__(self, workday, time_tuples):
