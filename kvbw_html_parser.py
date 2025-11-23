@@ -95,13 +95,22 @@ def parse_arzt(row):
     return arzt
 
 def parse_praxis(dd):
-    address_components = list(dd.p.stripped_strings)
-    name = address_components[0]
-    street_no = address_components[1]
-    plz = address_components[2].split(' ')[0]
-    city = address_components[3].removeprefix('Ortsteil: ')
-    province = address_components[4].removeprefix('Landkreis: ')
-    address = Address(plz, province, city, street_no)
+    address_regex = re.compile(r'(?P<name>[\w -.]+)(?:<br/?>(?P<street_no>[\w .-]+ \d+(?:(?:-|/)\d+)?))?(?:<br/?>(?P<zip>\d{5}) (?P<city>[\w .-]+))?(?:<br/?>Ortsteil: (?P<district>[\w .-]+))?(?:<br/?>Landkreis: (?P<province>[\w .-]+))?')
+    address_text = dd.p.decode_contents()
+    match = address_regex.match(address_text)
+    
+    if not match:
+        print("No match for address in text.\n{}".format(address_text))
+        return None
+
+    name = match.group('name')
+    street_no = match.group('street_no')
+    zip = match.group('zip')
+    district = match.group('district')
+    city = match.group('city')
+    province = match.group('province')
+
+    address = Address(zip, province, city, district, street_no)
     
     contact_dl = dd.dl
     if contact_dl is None:

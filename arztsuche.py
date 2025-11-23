@@ -1,14 +1,17 @@
 from enum import StrEnum
 
+delimiter = "$"
+
 class Address(object):
-    def __init__(self, plz, province, city, street_no):
-        self.plz = plz # 76131
+    def __init__(self, zip, province, city, district, street_no):
+        self.zip = zip # 76131
         self.province = province # Karlsruhe - Stadt
-        self.city = city # Oststadt
+        self.city = city # Karlsruhe
+        self.district = district or "" # Oststadt
         self.street_no = street_no # Haizingerstraße 11
 
     def to_csv(self):
-        return ",".join([self.plz, self.province, self.city, self.street_no])
+        return delimiter.join([self.zip, self.province, self.city, self.district, self.street_no])
 
 class Weekday(StrEnum):
     MONDAY = 'Mo'
@@ -42,7 +45,7 @@ class Praxis(object):
         self.praxistypes = praxistypes # Zweigpraxis
 
     def to_csv(self):
-        return ",".join([self.name,
+        return delimiter.join([self.name,
                          ";".join(self.email),
                          ";".join(self.tel),
                          ";".join(self.fax),
@@ -82,7 +85,7 @@ class Arzt(object):
         self.phone_hours = phone_hours # type [Time]
 
     def to_csv(self):
-        return ",".join([self.degree, self.name, self.surname,
+        return delimiter.join([self.degree, self.name, self.surname,
                          ";".join(self.ids),
                          ";".join(self.languages),
                          self.status, self.drtype,

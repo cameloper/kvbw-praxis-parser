@@ -14,8 +14,8 @@ def parse(paths):
             with open(path, 'r') as f:
                 p_arzts = kvbw.parse_all_resultrows(f)
                 arzts = arzts + p_arzts
-        except:
-            sys.exit("Could not parse file: {}.".format(path))
+        except Exception as err:
+            sys.exit("Could not parse file: {}.\n{}".format(path, err))
 
     print("Parsed total number of {} arzts.".format(len(arzts)))
     return arzts
